@@ -1,23 +1,40 @@
 #Código para calcular  n-ésimo número da sequência de Fibonacci
 .data
-	space: .asciiz " - "
+	msg_0: .asciiz "fib("
+	msg_1: .asciiz ") = "
+	br: .asciiz "\n"
 
 .text
-	li $t0, 15
+	li $t0, 40
 	li $t1, 0		#iterador
+	
 	main_loop:
 	move $a0, $t1
 	jal fib
-	addi $t1, $t1, 1
+	move $t2, $v0		#t2 = fib(i)
 	
-	move $a0, $v0
-	li $v0, 1
-	syscall
-	la $a0, space
+	#Impressão da mensagem no console
+	la $a0, msg_0 
 	li $v0, 4
 	syscall
+	move $a0, $t1
+	li $v0, 1
+	syscall
+	la $a0, msg_1
+	li $v0, 4
+	syscall
+	move $a0, $t2
+	li $v0, 1
+	syscall
+	la $a0, br
+	li $v0, 4
+	syscall 
+	
+	#Verificador do loop
+	addi $t1, $t1, 1
 	ble $t1, $t0, main_loop
 
+	#Finalização do programa
 	li $v0, 10
 	syscall
 
