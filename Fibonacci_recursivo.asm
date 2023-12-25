@@ -34,7 +34,7 @@ fib:
 	move $t3, $a0 			#t4 guardará o valor de n
 	li $t9, 0 			#t9 será o iterador
 	li $t0, 0			#a = 0
-	li $t1, 1			#b = 0
+	li $t1, 1			#b = 1
 	beq $t3, $zero, end_loop	#if n == 0 goto end_loop
 	
 	loop:
