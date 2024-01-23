@@ -11,16 +11,6 @@ revealNeighboringCells:
 	move $s1, $a1		# row
 	move $s2, $a2		# col
 	
-	sll $t2, $s3, 5
-	sll $t3, $s4, 2
-	add $t0, $t2, $t3		# t0 <- i*8 + j
-	add $t0, $t0, $s0		# t0 <- board[i][j]
-	
-	sne $t1, $t0, -2
-	sne $t2, $t0, -1
-	and $t0, $t1, $t2
-	beq $t0, $zero, end_for_reveal_i
-	
 	addi $s3, $a1, -1	#i = row - 1
 	begin_for_reveal_i:
 		addi $t0, $a1, 1
