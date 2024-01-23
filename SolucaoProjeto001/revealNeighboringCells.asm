@@ -11,16 +11,25 @@ revealNeighboringCells:
 	move $s1, $a1		# row
 	move $s2, $a2		# col
 	
-	li $s7, 0			#count = 0
+	sll $t2, $s3, 5
+	sll $t3, $s4, 2
+	add $t0, $t2, $t3		# t0 <- i*8 + j
+	add $t0, $t0, $s0		# t0 <- board[i][j]
+	
+	sne $t1, $t0, -2
+	sne $t2, $t0, -1
+	and $t0, $t1, $t2
+	beq $t0, $zero, end_for_reveal_i
+	
 	addi $s3, $a1, -1	#i = row - 1
-	begin_for_count_i:
+	begin_for_reveal_i:
 		addi $t0, $a1, 1
-		bgt $s3, $t0, end_for_count_i
+		bgt $s3, $t0, end_for_reveal_i
 		
 		addi $s4, $a2, -1		#j = col - 1
-		begin_for_count_j:
+		begin_for_reveal_j:
 			addi $t0, $a2, 1
-			bgt $s4, $t0, end_for_count_j
+			bgt $s4, $t0, end_for_reveal_j
 		
 			li $t0, 8
 			sge $t1, $s3, 0			#t1 <- i >= 0
@@ -40,7 +49,7 @@ revealNeighboringCells:
 			seq $t0, $t0, -2		# t0 <- board[i][j] == -1
 			and $t0, $t0, $t1
 			
-			beq $t0, $zero, end_if_count
+			beq $t0, $zero, end_if_reveal
 				move $a0, $s3
 				move $a1, $s4
 				move $s6, $ra
@@ -50,17 +59,15 @@ revealNeighboringCells:
 				
 				bne $v0, $0, recursion
 				
-			end_if_count:
+			end_if_reveal:
 		
 			addi $s4, $s4, 1
-			j begin_for_count_j
-		end_for_count_j:
+			j begin_for_reveal_j
+		end_for_reveal_j:
 		
 		addi $s3, $s3, 1
-		j begin_for_count_i
-	end_for_count_i:
-	
-	move $v0, $s7
+		j begin_for_reveal_i
+	end_for_reveal_i:
 	
 	lw $ra, 0($sp)
 	addi $sp, $sp, 4
