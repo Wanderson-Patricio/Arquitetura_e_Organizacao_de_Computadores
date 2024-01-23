@@ -43,7 +43,7 @@ main:
   syscall
   move $s3, $v0 
   
-  li $t0, SIZE
+  li $t0, 8
   blt $s2, $zero, else_invalid	#if (row >= 0 && row < SIZE && column >= 0 && column < SIZE) {
   bge $s2, $t0, else_invalid		
   blt $s3, $zero, else_invalid

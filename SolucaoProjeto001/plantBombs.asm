@@ -11,7 +11,7 @@ plantBombs:
 	
 	li $s1, 0   # i = 0
 	begin_for_i_pb:							#  for (int i = 0; i < BOMB_COUNT; ++i) {
-	lw $t0, BOMB_COUNT
+	li $t0, 10
 	bge $s1, $t0, end_for_i_pb 
 	
 	do_cb:											# do {
@@ -24,7 +24,7 @@ plantBombs:
 	sll $t1, $s3, 2
 	add $t2, $t0, $t1
 	add $t0, $t2, $s0
-	lw $t1,0 ($t0)
+	lw $t1, 0($t0)
 	li $t2, -1
 	beq $t2, $t1, do_cb #  while (board[row][column] == -1);
 	sw $t2,0 ($t0)			#  board[row][column] = -1; // -1 means bomb present

@@ -9,7 +9,7 @@ revealNeighboringCells:
 	
 	move $s0, $a0		# &board
 	move $s1, $a1		# row
-	move $s2, $a1		# col
+	move $s2, $a2		# col
 	
 	li $s7, 0			#count = 0
 	addi $s3, $a1, -1	#i = row - 1
@@ -43,7 +43,9 @@ revealNeighboringCells:
 			beq $t0, $zero, end_if_count
 				move $a0, $s3
 				move $a1, $s4
+				move $s6, $ra
 				jal countAdjacentBombs
+				move $ra, $s6
 				sw $v0, 0($s5)
 				
 				bne $v0, $0, recursion
@@ -60,7 +62,7 @@ revealNeighboringCells:
 	
 	move $v0, $s7
 	
-	lw $ra, 0 ($sp)
+	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	restore_context
 	jr $ra
@@ -72,7 +74,7 @@ recursion:
 	move $a2, $s4
 	jal revealNeighboringCells		#revealNeighboringCells(board, i, j)
 	
-	lw $ra, 0 ($sp)
+	lw $ra, 0($sp)
 	addi $sp, $sp, 4
 	restore_context
 	jr $ra

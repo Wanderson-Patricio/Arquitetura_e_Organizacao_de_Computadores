@@ -16,8 +16,8 @@ printBoard:
   
   
   li $t0, 0
-  begin_for_j1_pb:						# for (int j = 0; j < SIZE; ++j)	
-  li $t1, SIZE
+  begin_for_j1_pb:						# for (int j = 0; j < 8; ++j)	
+  li $t1, 8
   bge $t0, $t1, end_for_j1_pb
   li $v0, 11 
   li $a0, 32 									#print (' ')
@@ -44,8 +44,8 @@ printBoard:
   syscall
    
   li $t0, 0
-  begin_for_j2_pb:						# for (int j = 0; j < SIZE; ++j)
-  li $t1, SIZE
+  begin_for_j2_pb:						# for (int j = 0; j < 8; ++j)
+  li $t1, 8
   bge $t0, $t1, end_for_j2_pb
   li $v0, 11
   li $a0, 95 									# printf("___");
@@ -61,8 +61,8 @@ printBoard:
   syscall
     
   li $t0, 0
-  begin_for_i_pb:							# for (int i = 0; i < SIZE; ++i) {
-  li $t7, SIZE
+  begin_for_i_pb:							# for (int i = 0; i < 8; ++i) {
+  li $t7, 8
   bge $t0, $t7, end_for_i_pb
   li $v0, 1
   move $a0, $t0 							# printf(i)
@@ -81,8 +81,8 @@ printBoard:
   syscall
   	
   li $t1, 0
-  begin_for_ji_pb:						# for (int j = 0; j < SIZE; ++j) {
-  li $t7, SIZE
+  begin_for_ji_pb:						# for (int j = 0; j < 8; ++j) {
+  li $t7, 8
   bge $t1, $t7, end_for_ji_pb
   li $v0, 11
   li $a0, 32 									# print(" ")
@@ -93,7 +93,7 @@ printBoard:
 	
 	add $t4, $t2, $t3
 	add $t3, $t4, $s0
-	lw  $t4, 0 ($t3)
+	lw  $t4, 0($t3)
 	li $t7, -1
 	bne $t4, $t7, elseif_imt		# if (board[i][j] == -1 && showBombs) {
 	beqz $s1, elseif_imt		

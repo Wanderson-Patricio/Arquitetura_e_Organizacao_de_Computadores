@@ -1,5 +1,3 @@
-.eqv BOMB_COUNT 10
-
 .macro save_context
 	addi $sp, $sp, -36
 	sw $s0, 0 ($sp)
