@@ -4,34 +4,40 @@
 
 play:
 	save_context
+	
 	move $s0, $a0
 	move $s1, $a1
 	move $s2, $a2
 	
-	sll $t0, $s1, 5 # i*8
-  	sll $t1, $s2, 2 # j
-  	add $t0, $t0, $t1
-  	add $t0, $t0, $s0
-	move $s1, $t0
+	get_ij_address
+	add $t0, $t0, $s0
+	lw $t0, 0($t0)				# t0 := board[i][j]
 	
 	li $v0, 0
-	beq $s1, -1 , end_play
-	bne $s1, -2, end_if_play
+	beq $t0, -1, end_zero
 	
-	move $s6, $ra
+	bne $t0, -2, end_one
+	
+	move $s3, $ra
 	jal countAdjacentBombs
-	move $ra, $s6
+	move $ra, $s3
 	
-	sw $v0, 0($s1)
-	bne $v0, $0, end_reveal
+	move $a1, $s1
+	move $a2, $s2
+	get_ij_address
+	add $t0, $t0, $s0
+	sw $v0, 0($t0)
+	
+	bne $v0, $0, end_if_play
 		move $a0, $s0
 		move $a1, $s1
 		move $a2, $s2
-		jal revealNeighboringCells
-	end_reveal:
-	
+		jal revealAdjacentCells
 	end_if_play:
+	
+	end_one:
 	li $v0, 1
-	end_play:
+	
+	end_zero:
 	restore_context
 	jr $ra
