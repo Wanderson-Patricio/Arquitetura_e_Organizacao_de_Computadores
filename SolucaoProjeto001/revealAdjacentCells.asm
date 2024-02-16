@@ -30,8 +30,6 @@ revealAdjacentCells:
 	add $t0, $t0, $s0
 	sw $v0, 0($t0)
 	
-	bnez $v0, end_reveal
-	
 	addi $s3, $s1, -1				# s3 := row - 1
 	rv_i_loop:
 		addi $t0, $s1, 1				# t0 := row + 1
@@ -56,7 +54,7 @@ revealAdjacentCells:
 			bne $t0, -2, end_if			# board[i][j] != -2
 			
 			#Entrou no caso recursivo
-			j recursive_case
+			jal recursive_case
 		
 			end_if:
 		
@@ -68,10 +66,8 @@ revealAdjacentCells:
 		j rv_i_loop
 	end_rv_i_loop:
 	
-	
+	#se chegou aqui não entrou na recursão, ou saiu do loop
 	end_reveal:
-	
-	#se chegou aqui não entrou na recursão, ou saiu dela
 	lw $s0, 0 ($sp)
 	lw $s1, 4 ($sp)
 	lw $s2, 8 ($sp)
@@ -90,8 +86,8 @@ revealAdjacentCells:
 	
 	
 recursive_case:
-	#move $a1, $s3
-	#move $a2, $s4
+	move $a1, $s3
+	move $a2, $s4
 	jal revealAdjacentCells
 	
 	lw $s0, 0 ($sp)
