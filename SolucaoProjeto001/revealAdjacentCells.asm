@@ -6,11 +6,23 @@ revealAdjacentCells:
 	addi $sp, $sp, -12
 	sw $ra, 0($sp)
 	sw $a1, 4($sp)
-	sw $a1, 8($sp)
+	sw $a2, 8($sp)
 	
 	move $s0, $a0			# &board
 	move $s1, $a1			# row
 	move $s2, $a2			# col
+	
+	move $s3, $ra
+	jal countAdjacentBombs
+	move $ra, $s3
+				
+	move $a1, $s1
+	move $a2, $s2
+	get_ij_address
+	add $t0, $t0, $s0
+	sw $v0, 0($t0)
+	
+	bne $v0, 0, end_reveal
 	
 	li $s4, -1
 	add $s4, $s4, $s1
@@ -37,33 +49,17 @@ revealAdjacentCells:
 			and $t2, $t2, $t3
 			and $s6, $t0, $t2			
 			
-			move $a1, $s1
-			move $a2, $s2
+			move $a1, $s4
+			move $a2, $s5
 			get_ij_address
 			add $t0, $t0, $s0
 			lw $t0, 0($t0)				# t0 := board[i][j]
 			
-			seq $t0, $t0, -2
+			slt $t0, $t0, $0			# board[i][j] < 0 wich means not revealed
 			and $t0, $t0, $s6
 			
-			bne $t0, 1, end_if_rv		# i>=o && i<SIZE && j>=0 && j<SIZE && board[i][j] == -2
-				
-				move $a0, $s0
-				move $a1, $s4
-				move $a2, $s5
-				move $s3, $ra
-				jal countAdjacentBombs
-				move $ra, $s3
-				
-				move $a1, $s4
-				move $a2, $s5
-				get_ij_address
-				add $t0, $t0, $s0
-				sw $v0, 0($t0)
-				
-				beq $v0, 0, recursive_case
-				
-			end_if_rv:
+			beq $t0, 1, recursive_case		# i>=o && i<SIZE && j>=0 && j<SIZE && board[i][j] == -2
+			
 			addi $s5, $s5, 1
 			j rv_j_loop
 		end_rv_j_loop:
@@ -72,7 +68,7 @@ revealAdjacentCells:
 		j rv_i_loop
 	end_rv_i_loop:
 	
-	move $v0, $s3
+	end_reveal:
 	
 	addi $sp, $sp, 12
 	restore_context
@@ -83,8 +79,8 @@ recursive_case:
     # Save context for recursive call
     addi $sp, $sp, -12
     sw $ra, 0($sp)   # Save return address
-    sw $s4, 4($sp)   # Save row
-    sw $s5, 8($sp)   # Save col
+    sw $a1, 4($sp)   # Save row
+    sw $a2, 8($sp)   # Save col
 
     # Recursive call
     move $a1, $s4    # Restore row
@@ -93,8 +89,8 @@ recursive_case:
 
     # Restore context after recursive call
     lw $ra, 0($sp)   # Restore return address
-    lw $s4, 4($sp)   # Restore row
-    lw $s5, 8($sp)   # Restore col
+    lw $a1, 4($sp)   # Restore row
+    lw $a2, 8($sp)   # Restore col
     addi $sp, $sp, 12
 
     jr $ra           # Return to the caller
