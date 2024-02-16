@@ -80,12 +80,21 @@ revealAdjacentCells:
 	
 	
 recursive_case:
-	move $a1, $s4
-	move $a2, $s5
-	jal revealAdjacentCells
-	
-	lw $ra, 0($sp)
-	lw $a0, 4($sp)
-	lw $a1, 8($sp)
-	addi $sp, $sp, 12
-	jr $ra
+    # Save context for recursive call
+    addi $sp, $sp, -12
+    sw $ra, 0($sp)   # Save return address
+    sw $s4, 4($sp)   # Save row
+    sw $s5, 8($sp)   # Save col
+
+    # Recursive call
+    move $a1, $s4    # Restore row
+    move $a2, $s5    # Restore col
+    jal revealAdjacentCells
+
+    # Restore context after recursive call
+    lw $ra, 0($sp)   # Restore return address
+    lw $s4, 4($sp)   # Restore row
+    lw $s5, 8($sp)   # Restore col
+    addi $sp, $sp, 12
+
+    jr $ra           # Return to the caller
