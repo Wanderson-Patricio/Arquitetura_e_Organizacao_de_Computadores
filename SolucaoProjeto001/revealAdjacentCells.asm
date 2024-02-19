@@ -29,6 +29,8 @@ revealAdjacentCells:
 	get_ij_address
 	add $t0, $t0, $s0
 	sw $v0, 0($t0)
+
+	bnez $v0, end_rv_i_loop
 	
 	addi $s3, $s1, -1				# s3 := row - 1
 	rv_i_loop:
