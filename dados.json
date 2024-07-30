@@ -1,0 +1,12 @@
+{
+    titulo: "Teste de dados",
+    dados: [
+        {
+            nome: "dado 1",
+            valor: 1
+        },{
+            nome: "dado 2",
+            valor: 2
+        }
+    ]
+}
